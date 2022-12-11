@@ -34,7 +34,6 @@ const server = require('http').Server(app);
 
 /** Routes */
 const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
 const courseRoutes = require('./routes/course');
 const sessionRoutes = require('./routes/session')
 const eventRoutes = require('./routes/event');
@@ -64,7 +63,6 @@ app.use('/api/auth', authRoutes);
 /** Middleware */
 app.all('*', middleware.verifyJWT)
 
-app.use('/api/user', userRoutes);
 app.use('/api/course', courseRoutes);
 app.use('/api/session', sessionRoutes);
 app.use('/api/event', eventRoutes);

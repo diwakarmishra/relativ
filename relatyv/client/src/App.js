@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import AuthPage from './components/auth';
+import AuthPage from './components/auth.js/auth';
 import Dashboard from './views/dashboard';
 import Session from './components/session/sessionDetail';
 import EventCalendar from './components/calendar/calendar';
