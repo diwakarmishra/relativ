@@ -10,6 +10,7 @@ const verifyJWT = (req, res, next) => {
                 if (err) {
                     return res.json({ auth: false, message: "Invalid Auth Token"});
                 } else {
+
                     req.user = decoded;
                     next();
                 }

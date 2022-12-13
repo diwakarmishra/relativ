@@ -26,7 +26,7 @@ const AddNewCourse = () => {
       });
 
       if(response.status) {
-         toast.success('Success Notification !', {
+         toast.success('Course added successfully!', {
             position: toast.POSITION.TOP_RIGHT
             });
       }
@@ -46,7 +46,7 @@ const AddNewCourse = () => {
       });
 
       if(response.status) {
-         toast.success('Success Notification !', {
+         toast.success('Course added successfully!', {
             position: toast.POSITION.TOP_RIGHT
             });
          setTimeout(e.preventDefault(),200)

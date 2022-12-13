@@ -4,13 +4,11 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/User');
 const gravatar = require('gravatar');
+const sendEmail = require('../services/sendgrid')
 
 /** Middleware */
 const {
-    checkRegistrationFields,
-    checkLoginFields,
     createErrorObject,
-    customSocialAuthenticate
 } = require('../middleware/authenticate');
 
 /**
@@ -25,15 +23,12 @@ router.post('/register', (req, res) => {
     let errors = [];
     User.findOne({ email: req.body.email }).then(user => {
         if (user) {
-            errors.push({ param: 'email', msg: 'Email is already taken' });
-
+            return response.status(400).send({
+                error: 'Email is already taken'
+            });
             // if (user.username === req.body.username) {
             //     errors.push({ param: 'username', msg: 'Username is already taken' });
             // }
-
-            res.send({
-                errors: createErrorObject(errors)
-            }).end();
         } else {
             /** Assign Gravatar */
             const avatar = gravatar.url(req.body.email, {
@@ -52,7 +47,7 @@ router.post('/register', (req, res) => {
 
             newUser
                 .save()
-                .then(userData => {
+                .then(async userData => {
                     const user = _.omit(userData.toObject(), ['password']);
 
                     const newObj = JSON.parse(JSON.stringify(user))
@@ -62,9 +57,19 @@ router.post('/register', (req, res) => {
                         expiresIn: 18000
                     });
 
+                    const min = 10000;
+                    const max = 99999;
+                    const otp = Math.floor(Math.random() * (max - min + 1)) + min;
+
+                    const secret = jwt.sign({otp : otp, email:  req.body.email}, process.env.JWT_SECRET, {
+                        expiresIn: 18000
+                    });
+
+                    await sendEmail( req.body.email, {otp :otp})
                     res.status(200).send({
                         auth: true,
                         token: `Bearer ${token}`,
+                        secret: secret,
                         user
                     });
                 })
@@ -78,6 +83,42 @@ router.post('/register', (req, res) => {
     });
 });
 
+
+router.post('/verify/otp', async (req, response) => {
+    try {
+
+        const { secret , otp } = req.body;
+        if (! (secret && otp) ) {
+            return response.status(404).send({
+                error: 'Invalid body'
+            });
+        }
+
+        const encoded = jwt.verify(secret, process.env.JWT_SECRET)
+
+        let user = await User.findOne({ email: encoded.email })
+
+        if(!user) {
+            return response.status(400).send({ status: false , message: 'Something Went Wrong!'})
+        }
+        user = _.omit(user.toObject(), ['password']);
+        const newObj = JSON.parse(JSON.stringify(user))
+
+        const token = jwt.sign(newObj, process.env.JWT_SECRET, { expiresIn: 18000 });
+
+        if(otp == encoded.otp) {
+            return response.status(200).send({ auth: true, token: `Bearer ${token}`, user })
+        }
+    
+        return response.status(200).send({ status: false , message: 'invalid OTP'})
+
+    }
+    catch ( error ) {
+        console.log(error , "error is here")
+        return response.status(400).send({ status: false , message: error?.data?.message || error})
+    }
+
+});
 /**
  * @description POST /login
  * @param  {} checkLoginFields
@@ -92,14 +133,17 @@ router.post('/login', async (req, response) => {
         const user = await User.findOne({ email: req.body.email })
 
         if (!user) {
-            return response.status(404).send({
-                error: 'No User Found'
+            return response.status(200).send({
+                status: false,
+                message: 'No User Found'
             });
         }
 
         if (req.body.password !== null && !(await user.isValidPassword(req.body.password))) {
-            return response.status(404).send({
-                error: 'Invalid Username or password'
+
+            return response.status(200).send({
+                status: false,
+                message: 'Invalid Username or password'
             });
         }
         const newObj = JSON.parse(JSON.stringify(user))
@@ -107,7 +151,7 @@ router.post('/login', async (req, response) => {
 
         const token = jwt.sign(newObj, process.env.JWT_SECRET, { expiresIn: 18000 });
     
-        response.status(200).send({ auth: true, token: `Bearer ${token}`, user })
+        return response.status(200).send({ auth: true, token: `Bearer ${token}`, user })
 
     }
     catch ( error ) {

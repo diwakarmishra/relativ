@@ -8,6 +8,7 @@ import EditNewCourse from './components/course/EditNewCourse';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import interceptor  from './services/axios'
 import ProtectedRoute from './components/protectedRoutes/ProtectedRoutes';
+import VerifyOtp from './components/auth.js/verifyOtp';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -27,6 +28,7 @@ function App() {
           </ProtectedRoute>
           } />
           <Route path="/" element={<AuthPage />} />
+          <Route path="/verify/otp" element={<VerifyOtp />} />
           <Route path="/session" element={<Session />} />
           <Route path="/calendar" element={<EventCalendar />} />
           <Route path="/addCourse" element={<AddNewCourse />} />

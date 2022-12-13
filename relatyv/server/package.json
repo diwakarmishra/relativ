@@ -17,6 +17,8 @@
     "author": "Lu-Vuong <lu-vuongle@hotmail.com>",
     "license": "MIT",
     "dependencies": {
+        "@sendgrid/mail": "^7.7.0",
+        "aws-sdk": "^2.1273.0",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.18.3",
         "compression": "^1.7.4",
@@ -29,6 +31,7 @@
         "helmet": "^3.15.0",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.3.1",
+        "multer": "^1.4.5-lts.1",
         "passport": "^0.4.0",
         "passport-facebook": "^2.1.1",
         "passport-google-oauth": "^1.0.0",

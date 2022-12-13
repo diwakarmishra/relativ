@@ -393,6 +393,8 @@ p {
 	margin-bottom: 1.5rem !important;
 }
 
+.edit-session ul li a .fa {    font-size: 20px;}
+
 @media (min-width: 992px) {
 	.sidebar-area {
 		height: 100vh;

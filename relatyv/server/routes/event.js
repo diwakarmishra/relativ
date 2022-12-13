@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
  router.post('/', async (req, res) => {
     try {
 
+        const userID = req.user ? req.user._id : null ;
         if(!req.body.description && req.body.title && req.body.start && req.body.end) {
             return res.status(404).json({ status: false , message: "Request Invalid!"});
         }
@@ -22,7 +23,7 @@ const mongoose = require('mongoose');
             paricipants: []
         }).save();
 
-        const _ = await User.updateOne({ _id : '638a238722ca314dde087588'} ,{ $push: {events: newEvent._id } })
+        const _ = await User.updateOne({ _id : userID } ,{ $push: {events: newEvent._id } })
 
         return res.status(200).send(newEvent);
     }

@@ -76,7 +76,7 @@ const EditNewCourse = () => {
       });
 
       if(response.status) {
-         toast.success('Success Notification !', {
+         toast.success('updated course successfully!', {
             position: toast.POSITION.TOP_RIGHT
             });
          reload()
@@ -100,7 +100,7 @@ const EditNewCourse = () => {
       });
 
       if(response.data.status) {
-         toast.success('Success Notification !', {
+         toast.success('Upated session successfully!', {
             position: toast.POSITION.TOP_RIGHT
             });
          reload()
@@ -150,7 +150,7 @@ const EditNewCourse = () => {
             <div class="content-area py-4 p-lg-4 w-100 bg-light">
                <div class="container">
                <div class="top-img mb-4">
-                     <img src="/images/top-img-1.jpg"></img>
+                     <img src="/images/doctor.jpg"></img>
                      <button onClick = {handleSubmit} class="btn btn-primary btn-block"> Update Course</button>
                </div>
                   <form>
@@ -168,8 +168,8 @@ const EditNewCourse = () => {
 
                   <div class="edit-session mb-5">
                      <ul class="m-0 list-unstyled">
-                        <li>
-                           <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#addsession" class="card">Add New Session</a>
+                        <li>  
+                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#addsession" class="card"><i class="fa fa-plus"></i>Add New Session</a>
                         </li>
                      </ul>
                   </div>
@@ -200,12 +200,12 @@ const EditNewCourse = () => {
                              <textarea class="form-control" id="description" name="description" onChange = { e=> { setSessionDescription(e.target.value)}} rows="3" placeholder="description"></textarea>
                         </div>
                         <div class="mb-2 modal-content-body">
-                           <label class ="SessionDateTimeLabel" for="SessionDateTimeLabel">Session Date Start</label> 
-                           <input type="datetime-local" id="sessionStart" name="sessionStart" onChange = { e=> { setSessionStart(e.target.value)}} />
+                           <label class ="SessionDateTimeLabel mb-2" for="SessionDateTimeLabel">Session Date Start</label> 
+                           <input  class="form-control" type="datetime-local" id="sessionStart" name="sessionStart" onChange = { e=> { setSessionStart(e.target.value)}} />
                        </div>
                        <div class="mb-2 modal-content-body">
-                           <label class ="SessionDateTimeLabel" for="SessionDateTimeLabel">Session Date End</label> 
-                           <input type="datetime-local" id="sessionEnd" name="sessionEnd" onChange = { e=> { setSessionEnd(e.target.value)}} />
+                           <label class ="SessionDateTimeLabel mb-2" for="SessionDateTimeLabel">Session Date End</label> 
+                           <input class="form-control" type="datetime-local" id="sessionEnd" name="sessionEnd" onChange = { e=> { setSessionEnd(e.target.value)}} />
                        </div>
                        
                         <button type="submit" name="sessionadd" class="btn btn-primary btn-block">Add Session</button>

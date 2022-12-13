@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
             errors.push({ param: 'no_content', msg: 'Invalid body' });
             return res.json({ errors: createErrorObject(errors) });
         }
-    
+
         const newSession = await new Session({
             description: req.body.description,
             title: req.body.title,

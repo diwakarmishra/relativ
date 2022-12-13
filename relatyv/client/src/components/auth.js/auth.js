@@ -23,11 +23,12 @@ const Auth =() => {
                 password: registerPassword
             });
             if(response.status) {
-                localStorage.setItem('token', response.data.token)
-                navigate("/dashboard")
+                localStorage.setItem('secret', response.data.secret)
+                navigate("/verify/otp")
             }
         }
         catch ( error ) {
+            console.log(error ,'error is here')
             toast.error('Something Went Wrong Please try again later!', {
                 position: toast.POSITION.TOP_RIGHT
             });
@@ -45,6 +46,11 @@ const Auth =() => {
             if(response?.data.auth) {
                 localStorage.setItem('token', response.data.token)
                 navigate("/dashboard")
+            }
+            if(!response.data.status) {
+                return toast.error(response.data?.message, {
+                    position: toast.POSITION.TOP_RIGHT
+                });
             }
         }
         catch ( error ) {

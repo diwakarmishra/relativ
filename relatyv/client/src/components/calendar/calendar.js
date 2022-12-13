@@ -13,6 +13,7 @@ const EventCalendar = (props) => {
         axios.get("/api/event")
         .then(res => {
             const result = res.data;
+            console.log(res, 'result is here')
             if(result.status) {
                 setEvent(result.data)
             }

@@ -1,9 +1,22 @@
 const express = require('express');
 const router = express.Router();
-
 const { Course } = require('../models/Course');
-
 const { createErrorObject } = require('../middleware/authenticate');
+const os = require('os');
+const multer = require('multer');
+const s3 = require('../utils/s3')
+
+const multerStorage = multer.diskStorage({
+    destination: os.tmpdir(),
+    filename: function (req, file, cb) {
+        let name = Date.now() + "-" + file.originalname
+        cb(null, name)
+    }
+});
+
+let upload = multer({
+    storage: multerStorage
+}).any()
 
 
 /**
@@ -11,7 +24,6 @@ const { createErrorObject } = require('../middleware/authenticate');
  */
  router.get('/', async ( req, res) => {
     try {
-        console.log(req.user, 'req user is here')
         const result = await Course.find({});
         return res.status(200).send(result) ;
     }
@@ -80,6 +92,26 @@ router.post('/', async (req, res) => {
     catch ( error ) {
         console.log(error)
         throw error ;
+    }
+
+});
+
+/**
+ * @description POST /api/course/upload
+ */
+router.post('/upload', upload, async (req, res) => {
+    try {
+        // const file = req.files;
+        // const courseId = req.body.course_id;
+        // const s3Path = `course/${courseId}/.${file[0].mimetype.split('/')[1]}`;
+        // await s3.uploadToS3(s3Path, file[0].path, {contentType: file[0].mimetype} );
+        // const getFile = await s3.getFilePath(s3Path)
+        // const updatedData = await Course.updateOne({_id : courseId}, { image: getFile })
+        return res.status(200).json({status: true});
+    }
+    catch ( error ) {
+        console.log(error)
+        return res.status(400).send({ status: true , message : error?.message || error})
     }
 
 });
