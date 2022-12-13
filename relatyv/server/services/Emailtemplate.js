@@ -18,4 +18,4 @@ const EmailTemplate = (OTP) => {
   </div>`
 }
 
-module.exports = EmailTemplate
+module.exports =  { EmailTemplate}
